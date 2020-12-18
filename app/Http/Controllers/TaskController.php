@@ -62,7 +62,7 @@ class TaskController extends Controller
     
             if ($validator->fails()) {
     
-                return response()->json(["status" => 1, "errors" => $validator]);
+                return response()->json(["status" => 0, "errors" => $validator->errors()], 400);
             }else{
     
                 $task = new Task();
@@ -77,7 +77,7 @@ class TaskController extends Controller
           
         } catch (\Exception $e) {
 
-            return response()->json(["error" => $e->getMessage()]);
+            return response()->json(["status" => 1, "error" => $e->getMessage()]);
         }
     }
 
@@ -99,7 +99,7 @@ class TaskController extends Controller
     
             if ($validator->fails()) {
     
-                return response()->json(["status" => 1, "errors" => $validator]);
+                return response()->json(["status" => 0, "errors" => $validator->errors()], 400);
             }else{
 
                 $task = Task::find($id);

@@ -2086,10 +2086,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2157,7 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.loading = false;
       })["catch"](function (error) {
         // handle error
-        this.loading = true;
+        this.loading = false;
         console.log("ocurrio un error: ", error);
       });
     },
@@ -2168,8 +2164,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$v.$invalid) {
         console.log("formulario invalido");
         return;
-      } //instacia afuera de la clase al adjuntar un archivo
-
+      }
 
       var me = this;
       var data = this.task;
@@ -2254,6 +2249,7 @@ __webpack_require__.r(__webpack_exports__);
     closeModal: function closeModal() {
       this.showModalTask = false;
       this.editing = false;
+      this.cleanForm();
     },
     cleanForm: function cleanForm() {
       this.task = {
@@ -57389,7 +57385,9 @@ var render = function() {
                                 ],
                                 staticClass: "form-control",
                                 class: !_vm.$v.task.name.$error
-                                  ? ""
+                                  ? _vm.task.name && !_vm.$v.task.name.$error
+                                    ? "is-valid"
+                                    : ""
                                   : "is-invalid",
                                 attrs: { type: "text", id: "task-name" },
                                 domProps: { value: _vm.task.name },
@@ -57440,7 +57438,10 @@ var render = function() {
                                 ],
                                 staticClass: "form-control",
                                 class: !_vm.$v.task.description.$error
-                                  ? ""
+                                  ? _vm.task.description &&
+                                    !_vm.$v.task.description.$error
+                                    ? "is-valid"
+                                    : ""
                                   : "is-invalid",
                                 attrs: { type: "text", id: "task-description" },
                                 domProps: { value: _vm.task.description },
@@ -57472,57 +57473,55 @@ var render = function() {
                             _c("div", { staticClass: "form-group" }, [
                               _c("label", [
                                 _vm._v(
-                                  "status:\n                                                "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.task.status,
-                                    expression: "task.status"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "checkbox" },
-                                domProps: {
-                                  checked: Array.isArray(_vm.task.status)
-                                    ? _vm._i(_vm.task.status, null) > -1
-                                    : _vm.task.status
-                                },
-                                on: {
-                                  change: function($event) {
-                                    var $$a = _vm.task.status,
-                                      $$el = $event.target,
-                                      $$c = $$el.checked ? true : false
-                                    if (Array.isArray($$a)) {
-                                      var $$v = null,
-                                        $$i = _vm._i($$a, $$v)
-                                      if ($$el.checked) {
-                                        $$i < 0 &&
-                                          _vm.$set(
-                                            _vm.task,
-                                            "status",
-                                            $$a.concat([$$v])
-                                          )
+                                  "Estado:\n                                                    "
+                                ),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.task.status,
+                                      expression: "task.status"
+                                    }
+                                  ],
+                                  attrs: { type: "checkbox" },
+                                  domProps: {
+                                    checked: Array.isArray(_vm.task.status)
+                                      ? _vm._i(_vm.task.status, null) > -1
+                                      : _vm.task.status
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.task.status,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = null,
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            _vm.$set(
+                                              _vm.task,
+                                              "status",
+                                              $$a.concat([$$v])
+                                            )
+                                        } else {
+                                          $$i > -1 &&
+                                            _vm.$set(
+                                              _vm.task,
+                                              "status",
+                                              $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1))
+                                            )
+                                        }
                                       } else {
-                                        $$i > -1 &&
-                                          _vm.$set(
-                                            _vm.task,
-                                            "status",
-                                            $$a
-                                              .slice(0, $$i)
-                                              .concat($$a.slice($$i + 1))
-                                          )
+                                        _vm.$set(_vm.task, "status", $$c)
                                       }
-                                    } else {
-                                      _vm.$set(_vm.task, "status", $$c)
                                     }
                                   }
-                                }
-                              }),
+                                })
+                              ]),
                               _vm._v(" "),
                               _c(
                                 "span",
@@ -57650,7 +57649,7 @@ var render = function() {
                       prevLabel: "anterior",
                       rowsPerPageLabel: "Filas por página",
                       ofLabel: "de",
-                      pageLabel: "página", // for 'pages' mode
+                      pageLabel: "página",
                       allLabel: "Todos"
                     }
                   },

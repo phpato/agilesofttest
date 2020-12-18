@@ -37,7 +37,6 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="task-name">Nombre:
@@ -47,7 +46,7 @@
                                                     v-model="task.name"
                                                     id="task-name"
                                                     class="form-control"
-                                                    :class="!$v.task.name.$error ? '': 'is-invalid'">
+                                                    :class="!$v.task.name.$error ? task.name&&!$v.task.name.$error? 'is-valid': '' : 'is-invalid'">
                                                     <div v-if="submitted&&$v.task.name.$error">
                                                         <span class="badge badge-danger">campo obligatorio</span>
                                                     </div>
@@ -60,22 +59,19 @@
                                                         v-model="task.description"
                                                         id="task-description"
                                                         class="form-control"
-                                                        :class="!$v.task.description.$error ? '': 'is-invalid'"></textarea>
+                                                        :class="!$v.task.description.$error ? task.description&&!$v.task.description.$error? 'is-valid': '' : 'is-invalid'"></textarea>
                                                     <div v-if="submitted&&$v.task.description.$error">
                                                         <span class="badge badge-danger">campo obligatorio</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>status:
-                                                    </label>
-                                                    <input type="checkbox" v-model="task.status" class="form-control">
+                                                    <label>Estado:
+                                                        <input type="checkbox" v-model="task.status"></label>
                                                         <span :class="task.status? 'badge  badge-success': 'badge  badge-danger' ">{{task.status ? 'Completada': 'Pendiende'}}</span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
-
                                         <div class="modal-footer">
                                             <button class="btn btn-danger" type="button" @click="closeModal">
                                                 <i class="fa fa-times"></i>
@@ -127,7 +123,7 @@
                                     prevLabel: 'anterior',
                                     rowsPerPageLabel: 'Filas por página',
                                     ofLabel: 'de',
-                                    pageLabel: 'página', // for 'pages' mode
+                                    pageLabel: 'página', 
                                     allLabel: 'Todos',
                                 }">
 
@@ -244,7 +240,7 @@
                             })
                             .catch(function (error) {
                                 // handle error
-                                this.loading = true;
+                                this.loading = false;
                                 console.log("ocurrio un error: ", error);
                             });
                     },
@@ -257,7 +253,6 @@
                             console.log("formulario invalido");
                             return;
                         }
-                        //instacia afuera de la clase al adjuntar un archivo
                         let me = this;
                         let data = this.task;
                         axios
@@ -339,6 +334,7 @@
                     closeModal() {
                         this.showModalTask = false;
                         this.editing = false;
+                        this.cleanForm();
                     },
                     cleanForm() {
                         this.task = {
